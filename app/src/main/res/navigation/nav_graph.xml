@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/nav_graph.xml"
+    android:id="@+id/nav_graph"
     app:startDestination="@id/homeFragment">
 
     <fragment
@@ -15,7 +15,7 @@
         android:label="Profile" />
 
     <fragment
-        android:id="@+id/libraryFragment"
-        android:name="com.upc.myapplication.LibraryFragment"
-        android:label="Library" />
+        android:id="@+id/bookingsFragment"
+        android:name="com.upc.myapplication.BookingsFragment"
+        android:label="Bookings" />
 </navigation>

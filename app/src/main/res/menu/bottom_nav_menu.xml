@@ -9,7 +9,7 @@
         android:icon="@drawable/ic_profile"
         android:title="" />
     <item
-        android:id="@+id/libraryFragment"
+        android:id="@+id/bookingsFragment"
         android:icon="@drawable/ic_library"
         android:title="" />
 </menu>
