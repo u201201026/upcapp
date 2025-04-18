@@ -63,21 +63,24 @@ class LoginActivity : AppCompatActivity() {
 
     fun login(view: View) {
         val dni = findViewById<TextView>(R.id.etDni).text.toString().trim()
+        val password = findViewById<TextView>(R.id.etPassword).text.toString().trim()
         if (dni.isEmpty()) {
             Toast.makeText(this, "El DNI es obligatorio", Toast.LENGTH_SHORT).show()
         }
-        val password = findViewById<TextView>(R.id.etPassword).text.toString().trim()
-        if (password.isEmpty()) {
+        else if (password.isEmpty()) {
             Toast.makeText(this, "La contraseña es obligatoria", Toast.LENGTH_SHORT).show()
         }
-        //TODO: Validación de usuario
-        if (dni == "1234" && password == "1234") {
-            val intent = Intent(this, MainActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            startActivity(intent)
-        }
         else{
-            Toast.makeText(this, "DNI o Contraseña incorrecta", Toast.LENGTH_SHORT).show()
+            //TODO: Validación de usuario
+            if (dni == "1234" && password == "1234") {
+                val intent = Intent(this, MainActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
+            }
+            else{
+                Toast.makeText(this, "DNI o Contraseña incorrecta", Toast.LENGTH_SHORT).show()
+            }
         }
+
     }
 }
