@@ -14,8 +14,12 @@ public class UserDao {
     private static String entityId = BuildConfig.AIRTABLE_USER_TABLE;
 
     public static AirtableRecord<UserFields>[] getUserByIdAndPassword(String id, String password){
+        String filter = "AND({ID} = '" + id + "', {Password} = '" + password + "')";
+        return searchUser(filter);
+    }
+
+    public static AirtableRecord<UserFields>[] searchUser(String filter){
         try {
-            String filter = "AND({ID} = '" + id + "', {Password} = '" + password + "')";
             String encodedFilter = URLEncoder.encode(filter, "UTF-8");
 
             AirtableClient airtableClient = new AirtableClient(entityId);
@@ -30,7 +34,7 @@ public class UserDao {
         }
     }
 
-    public static AirtableRecord<UserFields> create(UserFields userFields) {
+    public static AirtableRecord<UserFields> registerUser(UserFields userFields) {
         try {
             AirtableClient airtableClient = new AirtableClient(entityId);
             TypeToken<AirtableRecord<UserFields>> typeToken = new  TypeToken<>() {};

@@ -12,6 +12,7 @@ class UserService {
             val userRecord = userRecords.firstOrNull()
             return userRecord?.let {
                 User().apply {
+                    this.recordId = it.id
                     this.dni = it.fields.id
                     this.email = it.fields.email
                     this.fullName = it.fields.fullName
@@ -20,15 +21,15 @@ class UserService {
             }
         }
 
-        fun createAccount(dni : String, email : String, fullName : String, password : String, type : String) : User? {
+        fun createAccount(id : String, email : String, fullName : String, password : String, type : String) : User? {
             val userFields = UserFields().apply {
-                this.id = dni
+                this.id = id
                 this.email = email
                 this.fullName = fullName
                 this.password = password
                 this.type = type
             }
-            val userRecord : AirtableRecord<UserFields> = UserDao.create(userFields)
+            val userRecord : AirtableRecord<UserFields> = UserDao.registerUser(userFields)
             return userRecord.let {
                 User().apply {
                     this.dni = it.fields.id

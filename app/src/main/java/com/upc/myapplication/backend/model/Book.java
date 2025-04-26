@@ -1,7 +1,7 @@
 package com.upc.myapplication.backend.model;
 
 public class Book {
-    private String id;
+    private String recordId;
     private String title;
     private String author;
     private String genre;
@@ -11,12 +11,12 @@ public class Book {
     private String unavailable;
     private String available;
 
-    public String getId() {
-        return id;
+    public String getRecordId() {
+        return recordId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setRecordId(String recordId) {
+        this.recordId = recordId;
     }
 
     public String getTitle() {

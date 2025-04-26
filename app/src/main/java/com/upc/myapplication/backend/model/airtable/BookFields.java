@@ -1,4 +1,6 @@
 package com.upc.myapplication.backend.model.airtable;
+import androidx.annotation.NonNull;
+
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 
@@ -84,6 +86,7 @@ public class BookFields {
         this.available = available;
     }
 
+    @NonNull
     public String toString(){
         String gson = new Gson().toJson(this);
         gson = "{ \"fields\": " + gson + "}";

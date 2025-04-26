@@ -14,8 +14,12 @@ public class BookDao {
     private static String entityId = BuildConfig.AIRTABLE_BOOK_TABLE;
 
     public static AirtableRecord<BookFields>[] getAvailableBooks(){
+        String filter = "AND({Available} > 0)";
+        return searchBooks(filter);
+    }
+
+    public static AirtableRecord<BookFields>[] searchBooks(String filter){
         try {
-            String filter = "AND({Available} > 0)";
             String encodedFilter = URLEncoder.encode(filter, "UTF-8");
 
             AirtableClient airtableClient = new AirtableClient(entityId);

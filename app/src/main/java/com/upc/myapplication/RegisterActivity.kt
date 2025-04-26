@@ -18,6 +18,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.upc.myapplication.backend.service.UserService
 import com.upc.myapplication.backend.session.UserSession
+import kotlin.concurrent.thread
 
 class RegisterActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,7 +43,7 @@ class RegisterActivity : AppCompatActivity() {
         } else if (password != repeatPassword) {
             Toast.makeText(this, "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show()
         } else {
-            Thread {
+            thread {
                 val type = "Cliente" //siempre cliente por defecto
                 val user = UserService.createAccount(dni, email, name, password, type)
                 runOnUiThread {
@@ -51,7 +52,7 @@ class RegisterActivity : AppCompatActivity() {
                     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                     startActivity(intent)
                 }
-            }.start()
+            }
         }
     }
 

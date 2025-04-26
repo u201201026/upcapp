@@ -11,6 +11,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.upc.myapplication.backend.model.Book
 import com.upc.myapplication.backend.service.BookService
+import com.upc.myapplication.backend.session.UserSession
 import kotlin.concurrent.thread
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
@@ -66,9 +67,19 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun onReserveClick(book: Book) {
-        //TODO: Registrar la reserva del libro en BD
-        //Refrescamos la lista de libros porque la cantidad de libros disponibles ha cambiado
-        loadBooks()
-        Toast.makeText(requireContext(), "Libro reservado.", Toast.LENGTH_SHORT).show()
+        if(UserSession.currentUser == null){
+            //TODO: No debería llevarte al login?
+            Toast.makeText(requireContext(), "Debes iniciar sesión para reservar el libro!", Toast.LENGTH_SHORT).show()
+        }
+        else{
+            thread {
+                BookService.reserveBook(UserSession.currentUser!!, book)
+                requireActivity().runOnUiThread {
+                    Toast.makeText(requireContext(), "Libro reservado!", Toast.LENGTH_SHORT).show()
+                    //Refrescamos la lista de libros porque la cantidad de libros disponibles ha cambiado
+                    loadBooks()
+                }
+            }
+        }
     }
 }

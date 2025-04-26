@@ -1,10 +1,19 @@
 package com.upc.myapplication.backend.model;
 
 public class User {
+    private String recordId;
     private String dni;
     private String email;
     private String fullName;
     private String type;
+
+    public String getRecordId() {
+        return recordId;
+    }
+
+    public void setRecordId(String recordId) {
+        this.recordId = recordId;
+    }
 
     public String getDni() {
         return dni;
