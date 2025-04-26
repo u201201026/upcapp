@@ -1,5 +1,7 @@
 package com.upc.myapplication.backend.model.airtable;
 
+import androidx.annotation.NonNull;
+import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 
 public class UserFields {
@@ -11,6 +13,8 @@ public class UserFields {
     private String fullName;
     @SerializedName("Type")
     private String type;
+    @SerializedName("Password")
+    private String password;
 
     public String getId() {
         return id;
@@ -42,5 +46,20 @@ public class UserFields {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    @NonNull
+    public String toString(){
+        String gson = new Gson().toJson(this);
+        gson = "{ \"fields\": " + gson + "}";
+        return gson;
     }
 }

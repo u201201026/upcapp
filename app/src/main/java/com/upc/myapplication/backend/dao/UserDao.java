@@ -29,4 +29,16 @@ public class UserDao {
             throw new RuntimeException(e);
         }
     }
+
+    public static AirtableRecord<UserFields> create(UserFields userFields) {
+        try {
+            AirtableClient airtableClient = new AirtableClient(entityId);
+            TypeToken<AirtableRecord<UserFields>> typeToken = new  TypeToken<>() {};
+            return new Gson().fromJson(airtableClient.post(userFields.toString()), typeToken.getType());
+        } catch (IOException e) {
+            //TODO implement better exception handling
+            throw new RuntimeException(e);
+        }
+    }
+
 }

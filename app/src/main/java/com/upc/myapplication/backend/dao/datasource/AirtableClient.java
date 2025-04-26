@@ -63,10 +63,6 @@ public class AirtableClient {
 
             return httpClient.execute(httpGet, new BasicHttpClientResponseHandler());
         }
-        catch(Exception e){
-            e.printStackTrace();
-            throw e;
-        }
     }
 
     public void put(String id, String body) throws IOException {

@@ -8,9 +8,9 @@ import com.upc.myapplication.backend.model.airtable.BookFields
 class BookService {
     companion object {
         fun getAvailableBooks(): ArrayList<Book> {
-            val bookRecords: Array<AirtableRecord<BookFields>> = BookDao.getAvailableBooks()
             val books = arrayListOf<Book>()
 
+            val bookRecords: Array<AirtableRecord<BookFields>> = BookDao.getAvailableBooks()
             for (bookRecord in bookRecords) {
                 val fields = bookRecord.fields
                 val book = Book().apply {

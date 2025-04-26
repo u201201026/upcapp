@@ -16,9 +16,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.upc.myapplication.LoginActivity
+import com.upc.myapplication.backend.service.UserService
+import com.upc.myapplication.backend.session.UserSession
 
 class RegisterActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,10 +42,16 @@ class RegisterActivity : AppCompatActivity() {
         } else if (password != repeatPassword) {
             Toast.makeText(this, "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show()
         } else {
-            // TODO: Registrar nueva cuenta
-            val intent = Intent(this, MainActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            startActivity(intent)
+            Thread {
+                val type = "Cliente" //siempre cliente por defecto
+                val user = UserService.createAccount(dni, email, name, password, type)
+                runOnUiThread {
+                    UserSession.currentUser = user
+                    val intent = Intent(this, MainActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    startActivity(intent)
+                }
+            }.start()
         }
     }
 

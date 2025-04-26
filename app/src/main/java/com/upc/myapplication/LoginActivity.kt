@@ -73,7 +73,7 @@ class LoginActivity : AppCompatActivity() {
             Toast.makeText(this, "La contraseña es obligatoria", Toast.LENGTH_SHORT).show()
         } else {
             Thread {
-                val user = UserService.authenticateUser(dni, password)
+                val user = UserService.authenticate(dni, password)
                 runOnUiThread {
                     if (user != null) {
                         //registro el usuario en el Singleton UserSession (para futuro reuso)
