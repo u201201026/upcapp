@@ -2,11 +2,16 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("org.jetbrains.kotlin.kapt")
 }
 
 android {
     namespace = "com.upc.myapplication"
     compileSdk = 35
+
+    buildFeatures {
+        buildConfig = true
+    }
 
     defaultConfig {
         applicationId = "com.upc.myapplication"
@@ -16,6 +21,13 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "AIRTABLE_API_URL", "\"${project.property("AIRTABLE_API_URL")}\"")
+        buildConfigField("String", "AIRTABLE_API_KEY", "\"${project.property("AIRTABLE_API_KEY")}\"")
+        buildConfigField("String", "AIRTABLE_BASE_ID", "\"${project.property("AIRTABLE_BASE_ID")}\"")
+        buildConfigField("String", "AIRTABLE_USER_TABLE", "\"${project.property("AIRTABLE_USER_TABLE")}\"")
+        buildConfigField("String", "AIRTABLE_BOOK_TABLE", "\"${project.property("AIRTABLE_BOOK_TABLE")}\"")
+        buildConfigField("String", "AIRTABLE_USERBOOK_TABLE", "\"${project.property("AIRTABLE_USERBOOK_TABLE")}\"")
     }
 
     buildTypes {
@@ -36,6 +48,13 @@ android {
     }
     buildFeatures {
         compose = true
+    }
+
+    packagingOptions {
+        exclude("META-INF/DEPENDENCIES")
+        exclude("META-INF/LICENSE")
+        exclude("META-INF/LICENSE.txt")
+        exclude("META-INF/NOTICE")
     }
 }
 
@@ -63,4 +82,7 @@ dependencies {
     implementation("androidx.navigation:navigation-ui-ktx:2.8.9")
     implementation("com.google.android.material:material:1.12.0")
     implementation("com.google.android.material:material:1.12.0")
+    implementation("com.github.ok2c.hc5.android:httpclient-android:0.3.0")
+    implementation("com.google.code.gson:gson:2.10.1")
+    implementation("com.github.bumptech.glide:glide:4.16.0")
 }

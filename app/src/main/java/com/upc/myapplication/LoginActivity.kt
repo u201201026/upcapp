@@ -17,6 +17,8 @@ import android.graphics.Color
 import android.graphics.Typeface
 import android.text.TextPaint
 import android.text.style.StyleSpan
+import com.upc.myapplication.backend.service.UserService
+import com.upc.myapplication.backend.session.UserSession
 
 class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,23 +66,28 @@ class LoginActivity : AppCompatActivity() {
     fun login(view: View) {
         val dni = findViewById<TextView>(R.id.etDni).text.toString().trim()
         val password = findViewById<TextView>(R.id.etPassword).text.toString().trim()
+
         if (dni.isEmpty()) {
             Toast.makeText(this, "El DNI es obligatorio", Toast.LENGTH_SHORT).show()
-        }
-        else if (password.isEmpty()) {
+        } else if (password.isEmpty()) {
             Toast.makeText(this, "La contraseña es obligatoria", Toast.LENGTH_SHORT).show()
-        }
-        else{
-            //TODO: Validación de usuario
-            if (dni == "1234" && password == "1234") {
-                val intent = Intent(this, MainActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                startActivity(intent)
-            }
-            else{
-                Toast.makeText(this, "DNI o Contraseña incorrecta", Toast.LENGTH_SHORT).show()
-            }
-        }
+        } else {
+            Thread {
+                val user = UserService.authenticateUser(dni, password)
+                runOnUiThread {
+                    if (user != null) {
+                        //registro el usuario en el Singleton UserSession (para futuro reuso)
+                        UserSession.currentUser = user
 
+                        //Inicia la actividad principal
+                        val intent = Intent(this, MainActivity::class.java)
+                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        startActivity(intent)
+                    } else {
+                        Toast.makeText(this, "DNI o Contraseña incorrecta", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }.start()
+        }
     }
 }

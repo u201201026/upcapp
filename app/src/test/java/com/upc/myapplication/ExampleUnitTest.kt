@@ -1,5 +1,6 @@
 package com.upc.myapplication
 
+import com.upc.myapplication.backend.dao.BookDao
 import org.junit.Test
 
 import org.junit.Assert.*
