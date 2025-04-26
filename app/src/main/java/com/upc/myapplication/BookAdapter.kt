@@ -20,6 +20,7 @@ class BookAdapter(private var books: List<Book>,
         val author: TextView = itemView.findViewById(R.id.bookAuthor)
         val genre: TextView = itemView.findViewById(R.id.bookGenre)
         val year: TextView = itemView.findViewById(R.id.bookYear)
+        val available: TextView = itemView.findViewById(R.id.bookAvailable)
         val reserveButton: Button = itemView.findViewById(R.id.reserveButton)
     }
 
@@ -38,6 +39,7 @@ class BookAdapter(private var books: List<Book>,
         holder.author.text = "Autor: ${book.author}"
         holder.genre.text = "Genero: ${book.genre}"
         holder.year.text = "Año: ${book.year}"
+        holder.available.text = "${book.available} unidades disponibles"
 
         //Carga la imagen
         Glide.with(holder.itemView).load(book.coverUrl).into(holder.image)
