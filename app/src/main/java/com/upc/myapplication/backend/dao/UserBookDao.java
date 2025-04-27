@@ -7,7 +7,6 @@ import com.upc.myapplication.backend.dao.datasource.AirtableClient;
 import com.upc.myapplication.backend.model.airtable.AirtableRecord;
 import com.upc.myapplication.backend.model.airtable.AirtableResponse;
 import com.upc.myapplication.backend.model.airtable.UserBookFields;
-
 import java.io.IOException;
 import java.net.URLEncoder;
 
@@ -24,7 +23,11 @@ public class UserBookDao {
         }
     }
 
-    public static AirtableRecord<UserBookFields>[] getAllUserBooks(String userRecordId){
+    public static AirtableRecord<UserBookFields>[] getAllUserBooks(){
+        return searchUserBooks("");
+    }
+
+    public static AirtableRecord<UserBookFields>[] getUserBooks(String userRecordId){
         return searchUserBooks("AND({User} = '" + userRecordId + "')");
     }
 

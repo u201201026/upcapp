@@ -7,9 +7,9 @@ public class Book {
     private String genre;
     private String year;
     private String coverUrl;
-    private String stock;
-    private String unavailable;
-    private String available;
+    private Integer stock;
+    private Integer unavailable;
+    private Integer available;
 
     public String getRecordId() {
         return recordId;
@@ -59,27 +59,27 @@ public class Book {
         this.coverUrl = coverUrl;
     }
 
-    public String getStock() {
+    public Integer getStock() {
         return stock;
     }
 
-    public void setStock(String stock) {
+    public void setStock(Integer stock) {
         this.stock = stock;
     }
 
-    public String getUnavailable() {
+    public Integer getUnavailable() {
         return unavailable;
     }
 
-    public void setUnavailable(String unavailable) {
+    public void setUnavailable(Integer unavailable) {
         this.unavailable = unavailable;
     }
 
-    public String getAvailable() {
+    public Integer getAvailable() {
         return available;
     }
 
-    public void setAvailable(String available) {
+    public void setAvailable(Integer available) {
         this.available = available;
     }
 }

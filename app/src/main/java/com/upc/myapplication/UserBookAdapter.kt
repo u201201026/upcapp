@@ -12,6 +12,7 @@ import com.upc.myapplication.backend.model.UserBook
 import java.util.Calendar
 import android.graphics.Color
 import android.widget.Button
+import com.upc.myapplication.backend.session.UserSession
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -22,6 +23,7 @@ class UserBookAdapter(private var userBooks: List<UserBook>)  : RecyclerView.Ada
         val author: TextView = itemView.findViewById(R.id.userBookAuthor)
         val status: TextView = itemView.findViewById(R.id.userBookStatus)
         val extendButton: Button = itemView.findViewById(R.id.extendButton)
+        val lendButton: Button = itemView.findViewById(R.id.lendButton)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserBookViewHolder {
@@ -38,39 +40,51 @@ class UserBookAdapter(private var userBooks: List<UserBook>)  : RecyclerView.Ada
         holder.title.text = userBook.book.title
         holder.author.text = "Autor: ${userBook.book.author}"
 
+        //Fecha actual y formato
         val currentDate = Calendar.getInstance(TimeZone.getTimeZone("America/Lima")).time
         val targetFormat = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
         targetFormat.timeZone = TimeZone.getTimeZone("America/Lima")
 
-        var status = ""
+        //Configuración de detalles visuales de componenentes
+        holder.status.setTextColor(Color.GRAY)
         holder.extendButton.visibility = View.GONE
+        holder.lendButton.visibility = View.GONE
+
+        //Configuración de datos informativos
+        var status = ""
         if(userBook.status == "Reservado"){
             if(currentDate.after(userBook.reserveDueDate)){
-                holder.status.text = "Reserva vencida."
+                status = "Reserva vencida."
             }
             else{
-                holder.status.text = "Su reserva vence el " + targetFormat.format(userBook.reserveDueDate)
+                status = "La reserva vence el " + targetFormat.format(userBook.reserveDueDate)
+                if(UserSession.currentUser?.type != "Cliente"){
+                    holder.lendButton.visibility = View.VISIBLE
+                }
             }
         }
         else if(userBook.status == "Prestado"){
             if(currentDate.after(userBook.lendDueDate)){
-                holder.status.text = "Prestamo vencido."
+                status = "Prestamo vencido el ${targetFormat.format(userBook.lendDueDate)}"
                 holder.status.setTextColor(Color.RED)
             }
             else{
-                val lendText = "Su prestamo vence el " + targetFormat.format(userBook.lendDueDate)
-                holder.status.text = lendText
-                if(userBook.lendNumber < 3) {
+                status = "El prestamo vence el " + targetFormat.format(userBook.lendDueDate)
+                if(userBook.lendNumber < 3 && UserSession.currentUser?.type == "Cliente") {
                     holder.extendButton.visibility = View.VISIBLE
                 }
                 else{
-                    holder.status.text = lendText + "\nAlcanzó el límite máximo de extensiones de Préstamo"
+                    status = status + "\nAlcanzó el límite máximo de extensiones de Préstamo"
                 }
             }
         }
         else{
-            holder.status.text = "Prestamo finalizado."
+            status = "Prestamo finalizado."
         }
+        if(UserSession.currentUser?.type != "Cliente"){
+            status = "Cliente ${userBook.user.fullName} \n${status}"
+        }
+        holder.status.text = status
 
         //Carga la imagen
         Glide.with(holder.itemView).load(userBook.book.coverUrl).into(holder.image)

@@ -33,6 +33,8 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
 
         //Configura la busqueda por titulo
         val searchView = view.findViewById<SearchView>(R.id.bookSearchView)
+        searchView.queryHint = "Título"
+
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return false
@@ -54,7 +56,11 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
 
     private fun loadBooks() {
         thread {
-            val books = BookService.getAvailableBooks()
+            val books = if (UserSession.currentUser?.type == "Cliente") {
+                BookService.getAvailableBooks()
+            } else {
+                BookService.getAllBooks()
+            }
             fullBookList = books
             requireActivity().runOnUiThread {
                 if (isAdded) {

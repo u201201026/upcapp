@@ -7,6 +7,9 @@ import com.upc.myapplication.backend.dao.datasource.AirtableClient;
 import com.upc.myapplication.backend.model.airtable.AirtableRecord;
 import com.upc.myapplication.backend.model.airtable.AirtableResponse;
 import com.upc.myapplication.backend.model.airtable.UserFields;
+
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.net.URLEncoder;
 
@@ -15,6 +18,11 @@ public class UserDao {
 
     public static AirtableRecord<UserFields>[] getUserByIdAndPassword(String id, String password){
         String filter = "AND({ID} = '" + id + "', {Password} = '" + password + "')";
+        return searchUsers(filter);
+    }
+
+    public static AirtableRecord<UserFields>[] getUsersWithBooks(){
+        String filter = "AND( {UserBook} != '' )";
         return searchUsers(filter);
     }
 
@@ -43,4 +51,14 @@ public class UserDao {
         }
     }
 
+    public static AirtableRecord<UserFields> getByRecordId(@NotNull String recordId) {
+        try {
+            AirtableClient airtableClient = new AirtableClient(entityId);
+            String result = airtableClient.getById(recordId);
+            TypeToken<AirtableRecord<UserFields>> typeToken = new TypeToken<>(){};
+            return new Gson().fromJson(result, typeToken.getType());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

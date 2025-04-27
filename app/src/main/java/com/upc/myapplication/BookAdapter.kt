@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.upc.myapplication.backend.model.Book
+import com.upc.myapplication.backend.session.UserSession
 
 class BookAdapter(private var books: List<Book>,
                   private val onReserveClick: ((Book) -> Unit)?
@@ -39,6 +40,10 @@ class BookAdapter(private var books: List<Book>,
         holder.author.text = "Autor: ${book.author}"
         holder.genre.text = "Genero: ${book.genre}"
         holder.year.text = "Año: ${book.year}"
+        var available = 0
+        if(book.available.toInt() > 0){
+            available = book.available
+        }
         holder.available.text = "${book.available} unidades disponibles"
 
         //Carga la imagen
@@ -47,6 +52,10 @@ class BookAdapter(private var books: List<Book>,
         //Config de Boton
         holder.reserveButton.setOnClickListener {
             onReserveClick?.invoke(book)
+        }
+
+        if(UserSession.currentUser?.type == "Empleado"){
+            holder.reserveButton.visibility = View.GONE
         }
     }
 

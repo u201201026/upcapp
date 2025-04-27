@@ -26,8 +26,15 @@ class BookingsFragment : BaseFragment(R.layout.fragment_bookings) {
         recyclerView.adapter = adapter
         loadUserBooks()
 
-        //Configura la busqueda por titulo
+        //Configura la busqueda por titulo si eres cliente o DNI si eres empleado/admin
         val searchView = view.findViewById<SearchView>(R.id.userBookSearchView)
+        if(UserSession.currentUser?.type == "Cliente"){
+            searchView.queryHint = "Título"
+        }
+        else{
+            searchView.queryHint = "DNI del cliente"
+        }
+
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return false
@@ -37,8 +44,14 @@ class BookingsFragment : BaseFragment(R.layout.fragment_bookings) {
                 val filtered = if (newText.isNullOrBlank()) {
                     fullUserBookList
                 } else {
-                    fullUserBookList.filter {
-                        it.book.title.contains(newText, ignoreCase = true)
+                    if (UserSession.currentUser?.type == "Cliente") {
+                        fullUserBookList.filter {
+                            it.book.title.contains(newText, ignoreCase = true)
+                        }
+                    } else {
+                        fullUserBookList.filter {
+                            it.user.dni.contains(newText, ignoreCase = true)
+                        }
                     }
                 }
                 adapter.updateData(filtered)
@@ -49,7 +62,11 @@ class BookingsFragment : BaseFragment(R.layout.fragment_bookings) {
 
     private fun loadUserBooks() {
         thread {
-            val userBooks = UserBookService.getAllUserBooks(UserSession.currentUser)
+            val userBooks = if (UserSession.currentUser?.type == "Cliente") {
+                UserBookService.getUserBooks(UserSession.currentUser)
+            } else {
+                UserBookService.getAllUserBooks()
+            }
             fullUserBookList = userBooks
             requireActivity().runOnUiThread {
                 if (isAdded) {
