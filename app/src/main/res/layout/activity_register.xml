@@ -54,7 +54,7 @@
             android:background="@drawable/editext_back"
             android:ems="10"
             android:hint="Ingresa tu DNI"
-            android:inputType="text"
+            android:inputType="number"
             android:padding="12dp"
             android:textColor="#707070" />
 
@@ -99,7 +99,7 @@
             android:textColor="#707070"
             android:ems="10"
             android:background="@drawable/editext_back"
-            android:inputType="text"
+            android:inputType="textEmailAddress"
             android:hint="Ingresa tu correo" />
 
         <TextView
