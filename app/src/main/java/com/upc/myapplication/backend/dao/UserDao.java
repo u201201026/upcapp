@@ -15,10 +15,10 @@ public class UserDao {
 
     public static AirtableRecord<UserFields>[] getUserByIdAndPassword(String id, String password){
         String filter = "AND({ID} = '" + id + "', {Password} = '" + password + "')";
-        return searchUser(filter);
+        return searchUsers(filter);
     }
 
-    public static AirtableRecord<UserFields>[] searchUser(String filter){
+    private static AirtableRecord<UserFields>[] searchUsers(String filter){
         try {
             String encodedFilter = URLEncoder.encode(filter, "UTF-8");
 
@@ -29,7 +29,6 @@ public class UserDao {
             AirtableResponse<AirtableRecord<UserFields>> response = new Gson().fromJson(results, typeToken.getType());
             return response.getRecords();
         } catch (IOException e) {
-            //TODO implement better exception handling
             throw new RuntimeException(e);
         }
     }
@@ -40,7 +39,6 @@ public class UserDao {
             TypeToken<AirtableRecord<UserFields>> typeToken = new  TypeToken<>() {};
             return new Gson().fromJson(airtableClient.post(userFields.toString()), typeToken.getType());
         } catch (IOException e) {
-            //TODO implement better exception handling
             throw new RuntimeException(e);
         }
     }

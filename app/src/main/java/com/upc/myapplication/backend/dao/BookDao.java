@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.net.URLEncoder;
 import com.google.gson.reflect.TypeToken;
 
+import org.jetbrains.annotations.NotNull;
+
 public class BookDao {
     private static String entityId = BuildConfig.AIRTABLE_BOOK_TABLE;
 
@@ -18,7 +20,18 @@ public class BookDao {
         return searchBooks(filter);
     }
 
-    public static AirtableRecord<BookFields>[] searchBooks(String filter){
+    public static AirtableRecord<BookFields> getByRecordId(@NotNull String recordId) {
+        try {
+            AirtableClient airtableClient = new AirtableClient(entityId);
+            String result = airtableClient.getById(recordId);
+            TypeToken<AirtableRecord<BookFields>> typeToken = new TypeToken<>(){};
+            return new Gson().fromJson(result, typeToken.getType());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static AirtableRecord<BookFields>[] searchBooks(String filter){
         try {
             String encodedFilter = URLEncoder.encode(filter, "UTF-8");
 
@@ -29,7 +42,6 @@ public class BookDao {
             AirtableResponse<AirtableRecord<BookFields>> response = new Gson().fromJson(results, typeToken.getType());
             return response.getRecords();
         } catch (IOException e) {
-            //TODO implement better exception handling
             throw new RuntimeException(e);
         }
     }

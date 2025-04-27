@@ -6,26 +6,34 @@ import com.google.gson.annotations.SerializedName;
 
 public class UserBookFields {
     @SerializedName("User")
-    private String[] user;
+    private String[] userRecordId;
     @SerializedName("Book")
-    private String[] book;
+    private String[] bookRecordId;
     @SerializedName("Status")
     private String status;
+    @SerializedName("ReserveDueDate")
+    private String reserveDueDate;
+    @SerializedName("LendNumber")
+    private String lendNumber;
+    @SerializedName("LendDueDate")
+    private String lendDueDate;
+    @SerializedName("ReturnedDate")
+    private String returnedDate;
 
-    public String[] getUser() {
-        return user;
+    public String[] getUserRecordId() {
+        return userRecordId;
     }
 
-    public void setUser(String[] user) {
-        this.user = user;
+    public void setUserRecordId(String[] userRecordId) {
+        this.userRecordId = userRecordId;
     }
 
-    public String[] getBook() {
-        return book;
+    public String[] getBookRecordId() {
+        return bookRecordId;
     }
 
-    public void setBook(String[] book) {
-        this.book = book;
+    public void setBookRecordId(String[] bookRecordId) {
+        this.bookRecordId = bookRecordId;
     }
 
     public String getStatus() {
@@ -34,6 +42,38 @@ public class UserBookFields {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getReserveDueDate() {
+        return reserveDueDate;
+    }
+
+    public void setReserveDueDate(String reserveDueDate) {
+        this.reserveDueDate = reserveDueDate;
+    }
+
+    public String getLendNumber() {
+        return lendNumber;
+    }
+
+    public void setLendNumber(String lendNumber) {
+        this.lendNumber = lendNumber;
+    }
+
+    public String getLendDueDate() {
+        return lendDueDate;
+    }
+
+    public void setLendDueDate(String lendDueDate) {
+        this.lendDueDate = lendDueDate;
+    }
+
+    public String getReturnedDate() {
+        return returnedDate;
+    }
+
+    public void setReturnedDate(String returnedDate) {
+        this.returnedDate = returnedDate;
     }
 
     @NonNull
