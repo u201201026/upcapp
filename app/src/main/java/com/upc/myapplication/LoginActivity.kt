@@ -32,6 +32,7 @@ class LoginActivity : AppCompatActivity() {
         }
 
         configCreateAccountLink()
+        configResetPasswordLink()
     }
 
     fun configCreateAccountLink() {
@@ -62,6 +63,34 @@ class LoginActivity : AppCompatActivity() {
         tvCreateAccount.text = spannable
         tvCreateAccount.movementMethod = LinkMovementMethod.getInstance()
     }
+    fun configResetPasswordLink() {
+        val fullText = "¿Olvidaste tu contraseña? Recupérala"
+        val startIndex = fullText.indexOf("Recupérala")
+        val endIndex = fullText.length
+
+        val spannable = SpannableString(fullText)
+        val clickableSpan = object : ClickableSpan() {
+            override fun onClick(widget: View) {
+                val intent = Intent(this@LoginActivity, ChangePasswordActivity::class.java)
+                startActivity(intent)
+            }
+
+            override fun updateDrawState(ds: TextPaint) {
+                super.updateDrawState(ds)
+                ds.isUnderlineText = false
+                ds.color = Color.GRAY
+                ds.typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+            }
+        }
+
+        spannable.setSpan(StyleSpan(Typeface.BOLD), startIndex, endIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        spannable.setSpan(clickableSpan, startIndex, endIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+        val tvResetPassword = findViewById<TextView>(R.id.tvRecoverPassword)
+        tvResetPassword.text = spannable
+        tvResetPassword.movementMethod = LinkMovementMethod.getInstance()
+    }
+
 
     fun login(view: View) {
         val dni = findViewById<TextView>(R.id.etDni).text.toString().trim()
