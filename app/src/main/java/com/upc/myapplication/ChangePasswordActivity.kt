@@ -42,7 +42,6 @@ class ChangePasswordActivity : AppCompatActivity() {
             insets
         }
 
-        // Referencias a las vistas
         layoutStep1 = findViewById(R.id.layoutStep1)
         layoutStep2 = findViewById(R.id.layoutStep2)
         layoutStep3 = findViewById(R.id.layoutStep3)
@@ -89,8 +88,8 @@ class ChangePasswordActivity : AppCompatActivity() {
         val pass = etNewPassword.text.toString()
         val repeat = etRepeatPassword.text.toString()
 
-        if (pass.length < 6) {
-            etNewPassword.error = "Mínimo 6 caracteres"
+        if (pass.length < 8) {
+            etNewPassword.error = "Mínimo 8 caracteres"
             return
         }
 
