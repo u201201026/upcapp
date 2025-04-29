@@ -83,22 +83,11 @@
             android:inputType="textPassword"
             android:hint="Ingresa tu clave" />
 
-        <TextView
-            android:id="@+id/tvForgotPassword"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:text="¿Olvidaste tu contraseña?"
-            android:textStyle="bold"
-            android:textColor="@android:color/darker_gray"
-            android:textSize="14sp"
-            android:layout_gravity="center_horizontal" />
-
         <Button
             android:id="@+id/btnLogin"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="30dp"
             android:backgroundTint="#511A69"
             android:onClick="login"
             android:text="Iniciar sesión"
