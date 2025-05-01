@@ -81,7 +81,7 @@
             android:ems="10"
             android:background="@drawable/editext_back"
             android:inputType="textPassword"
-            android:hint="Ingresa tu clave" />
+            android:hint="Ingresa tu contraseña" />
 
         <Button
             android:id="@+id/btnLogin"

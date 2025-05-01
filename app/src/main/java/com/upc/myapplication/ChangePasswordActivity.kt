@@ -6,11 +6,13 @@ import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.upc.myapplication.backend.session.UserSession
 
 class ChangePasswordActivity : AppCompatActivity() {
 
@@ -62,6 +64,12 @@ class ChangePasswordActivity : AppCompatActivity() {
         btnVerifyCode.setOnClickListener { verificarCodigo() }
         btnChangePassword.setOnClickListener { cambiarContrasena() }
         btnGoToLogin.setOnClickListener { irAlLogin() }
+
+        if(UserSession.currentUser != null){
+            val tvTitle = findViewById<TextView>(R.id.tvTitle)
+            tvTitle.text = "Cambiar Contraseña"
+            cambiarPaso(3)
+        }
     }
 
     private fun enviarCodigo() {
@@ -98,13 +106,18 @@ class ChangePasswordActivity : AppCompatActivity() {
             return
         }
 
-
         Toast.makeText(this, "Contraseña cambiada", Toast.LENGTH_SHORT).show()
-        cambiarPaso(4)
+
+        if(UserSession.currentUser == null){
+            cambiarPaso(4)
+        }
+        else{
+            finish()
+        }
     }
 
     private fun irAlLogin() {
- intent = Intent(this, LoginActivity::class.java)
+        var intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
         finish()
     }

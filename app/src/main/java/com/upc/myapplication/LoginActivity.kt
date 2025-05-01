@@ -63,6 +63,7 @@ class LoginActivity : AppCompatActivity() {
         tvCreateAccount.text = spannable
         tvCreateAccount.movementMethod = LinkMovementMethod.getInstance()
     }
+
     fun configResetPasswordLink() {
         val fullText = "¿Olvidaste tu contraseña? Recupérala"
         val startIndex = fullText.indexOf("Recupérala")
