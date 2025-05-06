@@ -23,6 +23,15 @@ public class UserBookDao {
         }
     }
 
+    public static void updateUserBook(AirtableRecord<UserBookFields> userBookRecord){
+        try{
+            AirtableClient airtableClient = new AirtableClient(entityId);
+            airtableClient.put(userBookRecord.getId(), userBookRecord.getFields().toString());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static AirtableRecord<UserBookFields>[] getAllUserBooks(){
         return searchUserBooks("");
     }

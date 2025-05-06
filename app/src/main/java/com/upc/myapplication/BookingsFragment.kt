@@ -2,6 +2,7 @@ package com.upc.myapplication
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -13,51 +14,56 @@ import kotlin.concurrent.thread
 class BookingsFragment : BaseFragment(R.layout.fragment_bookings) {
     private lateinit var adapter: UserBookAdapter
     private var fullUserBookList: List<UserBook> = listOf()
+    private lateinit var searchView: SearchView
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //Inicializo el adaptador
-        adapter = UserBookAdapter(emptyList())
+        adapter = UserBookAdapter(
+            emptyList(),
+            onLendClick = { userBook -> onLendClick(userBook) },
+            onExtendClick = { userBook -> onExtendClick(userBook) },
+            onEndLoanClick = { userBook -> onEndLoanClick(userBook) },
+        )
 
-        //Carga los libros asociados al usuario en pantalla
         val recyclerView = view.findViewById<RecyclerView>(R.id.userBookRecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.adapter = adapter
-        loadUserBooks()
 
-        //Configura la busqueda por titulo si eres cliente o DNI si eres empleado/admin
-        val searchView = view.findViewById<SearchView>(R.id.userBookSearchView)
-        if(UserSession.currentUser?.type == "Cliente"){
+        searchView = view.findViewById(R.id.userBookSearchView)
+        if (UserSession.currentUser?.type == "Cliente") {
             searchView.queryHint = "Título"
-        }
-        else{
+        } else {
             searchView.queryHint = "DNI del cliente"
         }
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                return false
-            }
+            override fun onQueryTextSubmit(query: String?): Boolean = false
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                val filtered = if (newText.isNullOrBlank()) {
-                    fullUserBookList
-                } else {
-                    if (UserSession.currentUser?.type == "Cliente") {
-                        fullUserBookList.filter {
-                            it.book.title.contains(newText, ignoreCase = true)
-                        }
-                    } else {
-                        fullUserBookList.filter {
-                            it.user.dni.contains(newText, ignoreCase = true)
-                        }
-                    }
-                }
-                adapter.updateData(filtered)
+                applyFilter(newText ?: "")
                 return true
             }
         })
+
+        loadUserBooks()
+    }
+
+    private fun applyFilter(query: String) {
+        val filtered = if (query.isBlank()) {
+            fullUserBookList
+        } else {
+            if (UserSession.currentUser?.type == "Cliente") {
+                fullUserBookList.filter {
+                    it.book.title.contains(query, ignoreCase = true)
+                }
+            } else {
+                fullUserBookList.filter {
+                    it.user.dni.contains(query, ignoreCase = true)
+                }
+            }
+        }
+        adapter.updateData(filtered)
     }
 
     private fun loadUserBooks() {
@@ -70,7 +76,49 @@ class BookingsFragment : BaseFragment(R.layout.fragment_bookings) {
             fullUserBookList = userBooks
             requireActivity().runOnUiThread {
                 if (isAdded) {
-                    adapter.updateData(fullUserBookList)
+                    applyFilter(searchView.query?.toString() ?: "")
+                }
+            }
+        }
+    }
+
+    private fun onLendClick(userBook: UserBook) {
+        if (UserSession.currentUser == null) {
+            Toast.makeText(requireContext(), "Debes iniciar sesión para prestar el libro!", Toast.LENGTH_SHORT).show()
+        } else {
+            thread {
+                UserBookService.lendBook(userBook)
+                requireActivity().runOnUiThread {
+                    Toast.makeText(requireContext(), "Libro prestado!", Toast.LENGTH_SHORT).show()
+                    loadUserBooks()
+                }
+            }
+        }
+    }
+
+    private fun onExtendClick(userBook: UserBook) {
+        if (UserSession.currentUser == null) {
+            Toast.makeText(requireContext(), "Debes iniciar sesión para extender el préstamo del libro!", Toast.LENGTH_SHORT).show()
+        } else {
+            thread {
+                UserBookService.extendBookLoan(userBook)
+                requireActivity().runOnUiThread {
+                    Toast.makeText(requireContext(), "Préstamo extendido!", Toast.LENGTH_SHORT).show()
+                    loadUserBooks()
+                }
+            }
+        }
+    }
+
+    private fun onEndLoanClick(userBook: UserBook) {
+        if (UserSession.currentUser == null) {
+            Toast.makeText(requireContext(), "Debes iniciar sesión para finalizar el préstamo del libro!", Toast.LENGTH_SHORT).show()
+        } else {
+            thread {
+                UserBookService.endBookLoan(userBook)
+                requireActivity().runOnUiThread {
+                    Toast.makeText(requireContext(), "Préstamo finalizado!", Toast.LENGTH_SHORT).show()
+                    loadUserBooks()
                 }
             }
         }

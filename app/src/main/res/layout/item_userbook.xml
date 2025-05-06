@@ -61,6 +61,14 @@
                 android:text="Prestar"
                 android:layout_marginTop="8dp"
                 android:layout_gravity="end"/>
+
+            <Button
+                android:id="@+id/endLoanButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Finalizar Préstamo"
+                android:layout_marginTop="8dp"
+                android:layout_gravity="end"/>
         </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

@@ -3,6 +3,7 @@ package com.upc.myapplication.backend.model;
 import java.util.Date;
 
 public class UserBook {
+    private String id;
     private User user;
     private Book book;
     private String status;
@@ -10,6 +11,14 @@ public class UserBook {
     private Integer lendNumber;
     private Date lendDueDate;
     private Date returnedDate;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public User getUser() {
         return user;

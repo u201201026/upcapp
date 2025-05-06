@@ -16,7 +16,11 @@ import com.upc.myapplication.backend.session.UserSession
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class UserBookAdapter(private var userBooks: List<UserBook>)  : RecyclerView.Adapter<UserBookAdapter.UserBookViewHolder>() {
+class UserBookAdapter(private var userBooks: List<UserBook>,
+                      private val onLendClick: ((UserBook) -> Unit)?,
+                      private val onExtendClick: ((UserBook) -> Unit)?,
+                      private val onEndLoanClick: ((UserBook) -> Unit)?
+)  : RecyclerView.Adapter<UserBookAdapter.UserBookViewHolder>() {
     class UserBookViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val image: ImageView = itemView.findViewById(R.id.userBookImage)
         val title: TextView = itemView.findViewById(R.id.userBookTitle)
@@ -24,6 +28,7 @@ class UserBookAdapter(private var userBooks: List<UserBook>)  : RecyclerView.Ada
         val status: TextView = itemView.findViewById(R.id.userBookStatus)
         val extendButton: Button = itemView.findViewById(R.id.extendButton)
         val lendButton: Button = itemView.findViewById(R.id.lendButton)
+        val endLoanButton: Button = itemView.findViewById(R.id.endLoanButton)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserBookViewHolder {
@@ -49,6 +54,7 @@ class UserBookAdapter(private var userBooks: List<UserBook>)  : RecyclerView.Ada
         holder.status.setTextColor(Color.GRAY)
         holder.extendButton.visibility = View.GONE
         holder.lendButton.visibility = View.GONE
+        holder.endLoanButton.visibility = View.GONE
 
         //Configuración de datos informativos
         var status = ""
@@ -64,14 +70,21 @@ class UserBookAdapter(private var userBooks: List<UserBook>)  : RecyclerView.Ada
             }
         }
         else if(userBook.status == "Prestado"){
+            //Solo el empleado puede ver el boton para finalizar el prestamo
+            if(UserSession.currentUser?.type != "Cliente"){
+                holder.endLoanButton.visibility = View.VISIBLE
+            }
+            //Configura los estados del prestamo
             if(currentDate.after(userBook.lendDueDate)){
                 status = "Prestamo vencido el ${targetFormat.format(userBook.lendDueDate)}"
                 holder.status.setTextColor(Color.RED)
             }
             else{
                 status = "El prestamo vence el " + targetFormat.format(userBook.lendDueDate)
-                if(userBook.lendNumber < 3 && UserSession.currentUser?.type == "Cliente") {
-                    holder.extendButton.visibility = View.VISIBLE
+                if(userBook.lendNumber < 3) {
+                    if(UserSession.currentUser?.type == "Cliente"){
+                        holder.extendButton.visibility = View.VISIBLE
+                    }
                 }
                 else{
                     status = status + "\nAlcanzó el límite máximo de extensiones de Préstamo"
@@ -88,6 +101,17 @@ class UserBookAdapter(private var userBooks: List<UserBook>)  : RecyclerView.Ada
 
         //Carga la imagen
         Glide.with(holder.itemView).load(userBook.book.coverUrl).into(holder.image)
+
+        //Config de Boton
+        holder.lendButton.setOnClickListener {
+            onLendClick?.invoke(userBook)
+        }
+        holder.extendButton.setOnClickListener {
+            onExtendClick?.invoke(userBook)
+        }
+        holder.endLoanButton.setOnClickListener {
+            onEndLoanClick?.invoke(userBook)
+        }
     }
 
     fun updateData(newUserBooks: List<UserBook>) {

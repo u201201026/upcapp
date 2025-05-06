@@ -13,8 +13,10 @@ public class UserBookFields {
     private String status;
     @SerializedName("ReserveDueDate")
     private String reserveDueDate;
+    @SerializedName("LendDate")
+    private String lendDate;
     @SerializedName("LendNumber")
-    private String lendNumber;
+    private int lendNumber;
     @SerializedName("LendDueDate")
     private String lendDueDate;
     @SerializedName("ReturnedDate")
@@ -52,11 +54,11 @@ public class UserBookFields {
         this.reserveDueDate = reserveDueDate;
     }
 
-    public String getLendNumber() {
+    public int getLendNumber() {
         return lendNumber;
     }
 
-    public void setLendNumber(String lendNumber) {
+    public void setLendNumber(int lendNumber) {
         this.lendNumber = lendNumber;
     }
 
@@ -74,6 +76,14 @@ public class UserBookFields {
 
     public void setReturnedDate(String returnedDate) {
         this.returnedDate = returnedDate;
+    }
+
+    public String getLendDate() {
+        return lendDate;
+    }
+
+    public void setLendDate(String lendDate) {
+        this.lendDate = lendDate;
     }
 
     @NonNull
