@@ -59,7 +59,7 @@ class BookingsFragment : BaseFragment(R.layout.fragment_bookings) {
                 }
             } else {
                 fullUserBookList.filter {
-                    it.user.dni.contains(query, ignoreCase = true)
+                    it.user.nationalId.contains(query, ignoreCase = true)
                 }
             }
         }
@@ -69,11 +69,11 @@ class BookingsFragment : BaseFragment(R.layout.fragment_bookings) {
     private fun loadUserBooks() {
         thread {
             val userBooks = if (UserSession.currentUser?.type == "Cliente") {
-                UserBookService.getUserBooks(UserSession.currentUser)
+                UserBookService.getUserBooksByUserRecordId(UserSession.currentUser?.recordId)
             } else {
                 UserBookService.getAllUserBooks()
             }
-            fullUserBookList = userBooks
+            fullUserBookList = userBooks.toList()
             requireActivity().runOnUiThread {
                 if (isAdded) {
                     applyFilter(searchView.query?.toString() ?: "")
@@ -101,7 +101,7 @@ class BookingsFragment : BaseFragment(R.layout.fragment_bookings) {
             Toast.makeText(requireContext(), "Debes iniciar sesión para extender el préstamo del libro!", Toast.LENGTH_SHORT).show()
         } else {
             thread {
-                UserBookService.extendBookLoan(userBook)
+                UserBookService.extendLoan(userBook)
                 requireActivity().runOnUiThread {
                     Toast.makeText(requireContext(), "Préstamo extendido!", Toast.LENGTH_SHORT).show()
                     loadUserBooks()
@@ -115,7 +115,7 @@ class BookingsFragment : BaseFragment(R.layout.fragment_bookings) {
             Toast.makeText(requireContext(), "Debes iniciar sesión para finalizar el préstamo del libro!", Toast.LENGTH_SHORT).show()
         } else {
             thread {
-                UserBookService.endBookLoan(userBook)
+                UserBookService.returnBook(userBook)
                 requireActivity().runOnUiThread {
                     Toast.makeText(requireContext(), "Préstamo finalizado!", Toast.LENGTH_SHORT).show()
                     loadUserBooks()

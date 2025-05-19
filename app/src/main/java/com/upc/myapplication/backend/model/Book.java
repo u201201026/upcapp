@@ -1,14 +1,27 @@
 package com.upc.myapplication.backend.model;
 
+import androidx.annotation.NonNull;
+import com.google.gson.Gson;
+import com.google.gson.annotations.SerializedName;
+
 public class Book {
+    @SerializedName("recordId")
     private String recordId;
+    @SerializedName("title")
     private String title;
+    @SerializedName("author")
     private String author;
+    @SerializedName("genre")
     private String genre;
+    @SerializedName("year")
     private String year;
+    @SerializedName("coverUrl")
     private String coverUrl;
+    @SerializedName("stock")
     private Integer stock;
+    @SerializedName("unavailable")
     private Integer unavailable;
+    @SerializedName("available")
     private Integer available;
 
     public String getRecordId() {
@@ -81,5 +94,10 @@ public class Book {
 
     public void setAvailable(Integer available) {
         this.available = available;
+    }
+
+    @NonNull
+    public String toString(){
+        return new Gson().toJson(this);
     }
 }

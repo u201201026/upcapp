@@ -61,10 +61,10 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
             } else {
                 BookService.getAllBooks()
             }
-            fullBookList = books
+            fullBookList = books.toList()
             requireActivity().runOnUiThread {
                 if (isAdded) {
-                    adapter.updateData(books)
+                    adapter.updateData(books.toList())
                 }
             }
         }

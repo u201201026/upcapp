@@ -1,9 +1,5 @@
 package com.upc.myapplication
 
-import com.upc.myapplication.backend.dao.BookDao
-import com.upc.myapplication.backend.dao.UserBookDao
-import com.upc.myapplication.backend.model.User
-import com.upc.myapplication.backend.service.UserBookService
 import org.junit.Test
 
 import org.junit.Assert.*

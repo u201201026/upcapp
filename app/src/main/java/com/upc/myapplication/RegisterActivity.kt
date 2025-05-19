@@ -45,7 +45,7 @@ class RegisterActivity : AppCompatActivity() {
         } else {
             thread {
                 val type = "Cliente" //siempre cliente por defecto
-                val user = UserService.createAccount(dni, email, name, password, type)
+                val user = UserService.registerUser(dni, email, name, password, type)
                 runOnUiThread {
                     UserSession.currentUser = user
                     val intent = Intent(this, MainActivity::class.java)
